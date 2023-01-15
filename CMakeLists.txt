@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED TRUE)
 
 if(MINGW OR MSVC)
-  set(PLATFORM_SRCS src/windows/window.c)
+  set(PLATFORM_SRCS src/windows/opengl.c src/windows/window.c)
 endif(MINGW OR MSVC)
 
 set(SRCS external/glad/glad.c src/main.c)

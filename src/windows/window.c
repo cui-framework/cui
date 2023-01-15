@@ -5,7 +5,11 @@
 #include <Windows.h>
 
 #define __cui_windows_window_include__
+
 #include "include/window.h"
+#include "include/opengl.h"
+
+#include <glad/glad.h>
 
 HWND hwnd;
 MSG msg;
@@ -29,6 +33,8 @@ LRESULT CALLBACK wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 void cui_win32_window_new(unsigned int width, unsigned int height, const char *title) {
   if (!windowCreated) {
     windowCreated = true;
+
+    cui_win32_opengl_init();
 
     // Window class
     WNDCLASSW wc;
@@ -75,14 +81,22 @@ void cui_win32_window_new(unsigned int width, unsigned int height, const char *t
 
     ShowWindow(hwnd, SW_SHOW);
     UpdateWindow(hwnd);
+
+    cui_win32_opengl_context();
+    glViewport(0, 0, width, height);
   }
 }
 
 // Runs the Win32 window
 void cui_win32_window_run() {
   while (GetMessageW(&msg, NULL, 0, 0) > 0) {
+    glClearColor(220.0f/255.0f, 220.0f/255.0f, 220.0f/255.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
     TranslateMessage(&msg);
     DispatchMessageW(&msg);
+
+    cui_win32_opengl_present();
   }
 }
 
