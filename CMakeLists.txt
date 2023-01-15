@@ -8,7 +8,11 @@ if(MINGW OR MSVC)
   set(PLATFORM_SRCS src/windows/window.c)
 endif(MINGW OR MSVC)
 
-set(SRCS src/main.c)
+set(SRCS external/glad/glad.c src/main.c)
+
+add_subdirectory(external/cglm)
+include_directories(external)
+include_directories(external/cglm/include)
 
 add_executable(CUI ${PLATFORM_SRCS} ${SRCS})
 
