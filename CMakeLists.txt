@@ -13,6 +13,10 @@ if(APPLE)
   set(PLATFORM_SRCS src/macos/app.m src/macos/window.m)
 endif(APPLE)
 
+if(UNIX AND NOT APPLE)
+  set(PLATFORM_SRCS src/linux/window.c)
+endif(UNIX AND NOT APPLE)
+
 set(SRCS external/glad/glad.c src/main.c)
 
 add_subdirectory(external/cglm)
@@ -24,3 +28,7 @@ add_executable(CUI ${PLATFORM_SRCS} ${SRCS})
 if(MINGW OR MSVC)
   target_link_libraries(CUI user32 gdi32 opengl32)
 endif(MINGW OR MSVC)
+
+if(UNIX AND NOT APPLE)
+  target_link_libraries(CUI GL dl pthread X11)
+endif(UNIX AND NOT APPLE)
