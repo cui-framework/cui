@@ -90,7 +90,7 @@ void cui_win32_window_new(unsigned int width, unsigned int height, const char *t
 // Runs the Win32 window
 void cui_win32_window_run() {
   while (GetMessageW(&msg, NULL, 0, 0) > 0) {
-    glClearColor(220.0f/255.0f, 220.0f/255.0f, 220.0f/255.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     TranslateMessage(&msg);
