@@ -14,7 +14,7 @@ if(APPLE)
 endif(APPLE)
 
 if(UNIX AND NOT APPLE)
-  set(PLATFORM_SRCS src/linux/window.c)
+  set(PLATFORM_SRCS src/linux/window.c src/linux/opengl.c)
 endif(UNIX AND NOT APPLE)
 
 set(WIDGETS_SRCS src/widgets/window.c)
