@@ -10,7 +10,7 @@ endif(MINGW OR MSVC)
 
 if(APPLE)
   set(CMAKE_C_LINK_FLAGS "${CMAKE_OBJC_LINK_FLAGS} -framework Foundation -framework Cocoa")
-  set(PLATFORM_SRCS src/macos/app.m src/macos/window.m)
+  set(PLATFORM_SRCS src/macos/app.m src/macos/window.m src/macos/opengl.m)
 endif(APPLE)
 
 if(UNIX AND NOT APPLE)

@@ -6,7 +6,7 @@
 @end
 
 @protocol WindowProtocol <NSWindowDelegate>
-- (BOOL)windowShouldClose;
+- (BOOL)windowShouldClose:(id)sender;
 @end
 
 @interface WindowDelegate:NSObject<WindowProtocol>
