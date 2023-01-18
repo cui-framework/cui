@@ -17,13 +17,14 @@ if(UNIX AND NOT APPLE)
   set(PLATFORM_SRCS src/linux/window.c)
 endif(UNIX AND NOT APPLE)
 
+set(WIDGETS_SRCS src/widgets/window.c)
 set(SRCS external/glad/glad.c src/main.c)
 
 add_subdirectory(external/cglm)
 include_directories(external)
 include_directories(external/cglm/include)
 
-add_executable(CUI ${PLATFORM_SRCS} ${SRCS})
+add_executable(CUI ${PLATFORM_SRCS} ${WIDGETS_SRCS} ${SRCS})
 
 if(MINGW OR MSVC)
   target_link_libraries(CUI user32 gdi32 opengl32)

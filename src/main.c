@@ -1,12 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "macos/include/window.h"
+#include "widgets/include/window.h"
 
 int main(int argc, char *argv[]) {
-  cui_macos_window_new(1280, 720, "CUI Linux Test");
-  cui_macos_window_run();
-  cui_macos_window_close();
+  CUIWindowAttribs attribs;
+  attribs.width = 1280;
+  attribs.height = 720;
+  attribs.title = "Hello CUI!";
+
+  CUIWindow wnd = cui_window_init(attribs);
+  cui_window_run(&wnd);
 
   return 0;
 }
