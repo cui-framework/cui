@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
 
   CUIWindow wnd = cui_window_init(attribs);
 
-  CUIFrame *frame = cui_widgets_frame_init(10, 10, 200, 200, cui_color_create(255, 255, 255));
+  CUIFrame *frame = cui_widgets_frame_init(10, 10, 200, 200, cui_color_create(255, 0, 255));
 
   cui_window_addFrame(frame);
   cui_window_run(&wnd);

@@ -113,6 +113,11 @@ void cui_window_update() {
     glm_translate(frames[i]->model, transformation);
     glm_scale(frames[i]->model, scale);
 
+    // Compute & apply the color
+    vec3 color = {frames[i]->r, frames[i]->g, frames[i]->b};
+    int colorLoc = glGetUniformLocation(cui_renderer_getFrameProgram(), "color");
+    glUniform3fv(colorLoc, 1, color);
+
     // Apply the model matrix
     int modelLoc = glGetUniformLocation(cui_renderer_getFrameProgram(), "model");
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, frames[i]->model[0]);
