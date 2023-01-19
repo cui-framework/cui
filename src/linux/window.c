@@ -13,6 +13,7 @@
 #include <X11/Xutil.h>
 
 bool windowCreated = false;
+int linuxWindowActive = true;
 
 Display *display;
 Window window;
@@ -20,6 +21,7 @@ GC gc;
 int screen;
 
 Atom deleteWindow;
+XEvent ev;
 
 // Creates a new Linux X11 window
 void cui_linux_window_new(unsigned int width, unsigned int height, const char *title) {
@@ -68,28 +70,27 @@ void cui_linux_window_new(unsigned int width, unsigned int height, const char *t
 }
 
 // Runs the X window
-void cui_linux_window_run() {
-  XEvent ev;
+void cui_linux_window_update() {
+  if (XPending(display) > 0) {
+    XNextEvent(display, &ev);
 
-  while (true) {
-    if (XPending(display) > 0) {
-      XNextEvent(display, &ev);
-
-      if (ev.type == ClientMessage) {
-        if (ev.xclient.data.l[0] == deleteWindow) {
-          break;
-        }
-      }
-
-      if (ev.type == DestroyNotify) {
-        break;
+    if (ev.type == ClientMessage) {
+      if (ev.xclient.data.l[0] == deleteWindow) {
+        linuxWindowActive = false;
       }
     }
 
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    cui_linux_opengl_render();
+    if (ev.type == DestroyNotify) {
+      linuxWindowActive = false;
+    }
   }
+
+  cui_linux_opengl_render();
+}
+
+// Returns a boolean value determining if the window is active
+int cui_linux_window_active() {
+  return linuxWindowActive;
 }
 
 // Closes the X window

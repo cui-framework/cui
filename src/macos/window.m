@@ -33,15 +33,15 @@ void cui_macos_window_new(unsigned int width, unsigned int height, const char *t
   }
 }
 
-// Runs the window's main loop
-void cui_macos_window_run() {
-  while (isCloseRequested() == NO) {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+// Updates the window
+void cui_macos_window_update() {
+  [NSApp run];
+  cui_macos_opengl_render();
+}
 
-    [NSApp run];
-    cui_macos_opengl_render();
-  }
+// Returns a boolean value determining if the window is active
+int cui_macos_window_active() {
+  return isCloseRequested() == NO;
 }
 
 // Closes the window

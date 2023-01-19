@@ -88,16 +88,15 @@ void cui_win32_window_new(unsigned int width, unsigned int height, const char *t
 }
 
 // Runs the Win32 window
-void cui_win32_window_run() {
-  while (GetMessageW(&msg, NULL, 0, 0) > 0) {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+void cui_win32_window_update() {
+  TranslateMessage(&msg);
+  DispatchMessageW(&msg);
+  cui_win32_opengl_present();
+}
 
-    TranslateMessage(&msg);
-    DispatchMessageW(&msg);
-
-    cui_win32_opengl_present();
-  }
+// Returns a boolean value determining if the window should stay open
+int cui_win32_window_active() {
+  return GetMessageW(&msg, NULL, 0, 0) > 0;
 }
 
 // Closes the Win32 window
