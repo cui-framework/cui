@@ -5,8 +5,11 @@
   #include "../../include/color.h"
 #endif
 
+#include <cglm/cglm.h>
+
 typedef struct
 {
+  mat4 model;
   int x, y;
   int r, g, b;
   unsigned int width, height;

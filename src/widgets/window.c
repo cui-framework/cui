@@ -5,6 +5,7 @@
 #define __cui_widgets_frame_includes__
 
 #include <glad/glad.h>
+#include <cglm/cglm.h>
 
 #include "include/window.h"
 #include "../include/renderer.h"
@@ -20,6 +21,7 @@ void cui_window_update();
 #endif
 
 CUIFrame **frames;
+mat4 projection;
 int framesCount = 0;
 
 // Creates a new CUI window instance.
@@ -37,6 +39,7 @@ CUIWindow cui_window_init(CUIWindowAttribs attribs) {
   #endif
 
   cui_renderer_initFrame();
+  glm_ortho(0.0f, (float)attribs.width, (float)attribs.height, 0.0f, -1.0f, 1.0f, projection);
 
   return wnd;
 }
@@ -92,8 +95,25 @@ void cui_window_update() {
 
   cui_renderer_preDraw();
 
+  // Apply the projection matrix
+  int projectionLoc = glGetUniformLocation(cui_renderer_getFrameProgram(), "projection");
+  glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection[0]);
+
   // Object rendering
   for (int i = 0; i < framesCount; i++) {
+    // Compute model matrix
+    glm_mat4_identity(frames[i]->model);
+
+    vec3 transformation = {frames[i]->x + (frames[i]->width / 2), frames[i]->y + (frames[i]->height / 2), 0.0f};
+    vec3 scale = {frames[i]->width, frames[i]->height, 0.0f};
+
+    glm_translate(frames[i]->model, transformation);
+    glm_scale(frames[i]->model, scale);
+
+    // Apply the model matrix
+    int modelLoc = glGetUniformLocation(cui_renderer_getFrameProgram(), "model");
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, frames[i]->model[0]);
+
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
   }
 }

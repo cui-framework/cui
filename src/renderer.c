@@ -53,3 +53,8 @@ void cui_renderer_preDraw() {
   glUseProgram(frameProgram);
   glBindVertexArray(frameVao);
 }
+
+// Gets the frame renderer's shader program handle
+unsigned int cui_renderer_getFrameProgram() {
+  return frameProgram;
+}
