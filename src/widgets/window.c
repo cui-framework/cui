@@ -36,6 +36,9 @@ CUIWindow cui_window_init(CUIWindowAttribs attribs) {
     cui_linux_window_new(attribs.width, attribs.height, attribs.title);
   #elif _WIN32
     cui_win32_window_new(attribs.width, attribs.height, attribs.title);
+
+    int *size = cui_win32_window_getSize();
+    glViewport(0, 0, size[0], size[1]);
   #endif
 
   cui_renderer_initFrame();

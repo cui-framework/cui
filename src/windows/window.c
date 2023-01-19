@@ -83,7 +83,6 @@ void cui_win32_window_new(unsigned int width, unsigned int height, const char *t
     UpdateWindow(hwnd);
 
     cui_win32_opengl_context();
-    glViewport(0, 0, width, height);
   }
 }
 
@@ -105,6 +104,19 @@ void cui_win32_window_close() {
     windowCreated = false;
     DestroyWindow(hwnd);
   }
+}
+
+// Gets the size of the Win32 window
+int *cui_win32_window_getSize() {
+  int *size = malloc(2 * sizeof(int));
+
+  RECT rect;
+  GetClientRect(hwnd, &rect);
+
+  size[0] = rect.right - rect.left;
+  size[1] = rect.bottom - rect.top;
+
+  return size;
 }
 
 // Gets the Win32 window handle
