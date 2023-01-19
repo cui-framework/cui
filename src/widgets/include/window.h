@@ -1,6 +1,10 @@
 #ifndef _window_h_
 #define _window_h_
 
+#ifdef __cui_widgets_window_includes__
+  #include "frame.h"
+#endif
+
 typedef struct
 {
   int closed;
@@ -14,6 +18,7 @@ typedef struct
 } CUIWindowAttribs;
 
 CUIWindow cui_window_init(CUIWindowAttribs attribs);
+void cui_window_addFrame(CUIFrame *frame);
 void cui_window_run(CUIWindow *window);
 
 #endif

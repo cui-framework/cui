@@ -17,8 +17,8 @@ if(UNIX AND NOT APPLE)
   set(PLATFORM_SRCS src/linux/window.c src/linux/opengl.c)
 endif(UNIX AND NOT APPLE)
 
-set(WIDGETS_SRCS src/widgets/window.c)
-set(SRCS external/glad/glad.c src/main.c)
+set(WIDGETS_SRCS src/widgets/window.c src/widgets/frame.c)
+set(SRCS external/glad/glad.c src/main.c src/utils.c src/renderer.c src/color.c)
 
 add_subdirectory(external/cglm)
 include_directories(external)
