@@ -4,10 +4,13 @@
 #define __cui_widgets_frame_includes__
 
 #include <glad/glad.h>
+
 #include "include/frame.h"
+#include "../include/renderer.h"
 
 // Creates a new CUI frame component
 CUIFrame *cui_widgets_frame_init(int x, int y, unsigned int width, unsigned int height, CUIColor *color) {
+  glBindVertexArray(cui_renderer_getFrameVao());
   CUIFrame *frame = malloc(sizeof(CUIFrame));
 
   // Set member variables
@@ -44,6 +47,7 @@ CUIFrame *cui_widgets_frame_init(int x, int y, unsigned int width, unsigned int 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
+  glBindVertexArray(0);
   return frame;
 }
 

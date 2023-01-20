@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define __cui_widgets_image_includes__
 #define __cui_widgets_window_includes__
 #define __cui_widgets_frame_includes__
 
@@ -21,8 +22,12 @@ void cui_window_update();
 #endif
 
 CUIFrame **frames;
-mat4 projection;
 int framesCount = 0;
+
+CUIImage **images;
+int imagesCount = 0;
+
+mat4 projection;
 
 // Creates a new CUI window instance.
 CUIWindow cui_window_init(CUIWindowAttribs attribs) {
@@ -42,6 +47,8 @@ CUIWindow cui_window_init(CUIWindowAttribs attribs) {
   #endif
 
   cui_renderer_initFrame();
+  cui_renderer_initImage();
+
   glm_ortho(0.0f, (float)attribs.width, (float)attribs.height, 0.0f, -1.0f, 1.0f, projection);
 
   return wnd;
@@ -49,7 +56,8 @@ CUIWindow cui_window_init(CUIWindowAttribs attribs) {
 
 // Runs the native, cross platform window
 void cui_window_run(CUIWindow *window) {
-  cui_renderer_finalize();
+  cui_renderer_finalizeFrame();
+  cui_renderer_finalizeImage();
 
   #ifdef __APPLE__
     while (cui_macos_window_active()) {
@@ -91,12 +99,26 @@ void cui_window_addFrame(CUIFrame *frame) {
   framesCount++;
 }
 
+// Adds an image to the window's renderer
+void cui_window_addImage(CUIImage *image) {
+  if (imagesCount = 0) {
+    images = malloc(sizeof(CUIImage));
+  } else {
+    images = realloc(images, (imagesCount + 1) * sizeof(CUIImage));
+  }
+
+  images[imagesCount] = image;
+  imagesCount++;
+}
+
 // Updates the window (only called by CUI itself)
 void cui_window_update() {
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  cui_renderer_preDraw();
+  /// Frame rendering
+  cui_renderer_preDrawFrame();
+  glBindVertexArray(cui_renderer_getFrameVao());
 
   // Apply the projection matrix
   int projectionLoc = glGetUniformLocation(cui_renderer_getFrameProgram(), "projection");
@@ -124,4 +146,37 @@ void cui_window_update() {
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
   }
+  
+  glBindVertexArray(0);
+
+  /// Image rendering
+  cui_renderer_preDrawImage();
+  glBindVertexArray(cui_renderer_getImageVao());
+
+  // Apply the projection matrix
+  int projectionLocImg = glGetUniformLocation(cui_renderer_getImageProgram(), "projection");
+  glUniformMatrix4fv(projectionLocImg, 1, GL_FALSE, projection[0]);
+
+  // Object rendering
+  for (int i = 0; i < imagesCount; i++) {
+    // Bind texture
+    glBindTexture(GL_TEXTURE_2D, images[i]->texture);
+
+    // Compute model matrix
+    glm_mat4_identity(images[i]->model);
+
+    vec3 transformation = {images[i]->x + (images[i]->width / 2), images[i]->y + (images[i]->height / 2), 0.0f};
+    vec3 scale = {images[i]->width, images[i]->height, 0.0f};
+
+    glm_translate(images[i]->model, transformation);
+    glm_scale(images[i]->model, scale);
+
+    // Apply the model matrix
+    int modelLoc = glGetUniformLocation(cui_renderer_getImageProgram(), "model");
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, images[i]->model[0]);
+
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+  }
+
+  glBindVertexArray(0);
 }
