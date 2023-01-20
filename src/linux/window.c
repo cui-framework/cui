@@ -37,15 +37,13 @@ void cui_linux_window_new(unsigned int width, unsigned int height, const char *t
 
     // X window attributes
     XSetWindowAttributes attribs;
-    attribs.border_pixel = black;
-    attribs.background_pixel = white;
     attribs.override_redirect = True;
     attribs.event_mask = ExposureMask;
 
     // Create the window
     window = XCreateWindow(display, RootWindow(display, screen), 300, 300, width, 
       height, 0, DefaultDepth(display, screen), InputOutput, VisualNoMask, 
-      CWBackPixel | CWColormap | CWBorderPixel | CWEventMask, &attribs);
+      CWBackPixel | CWBorderPixel | CWEventMask, &attribs);
 
     if (!window) {
       printf("Error: Failed to create an X11 window.\n");
